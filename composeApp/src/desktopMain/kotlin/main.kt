@@ -18,8 +18,8 @@ import androidx.compose.ui.window.application
 
 fun main() = application {
     Window(onCloseRequest = ::exitApplication, title = "PlaygroundKMP") {
-    MouseEvents()
-    //App()
+    //MouseEvents()
+    App()
     }
 }
 
