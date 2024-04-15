@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
@@ -33,10 +34,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PlatformImeOptions
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -87,8 +94,11 @@ fun BottomSheet() {
                         color = Color.White,
                         modifier = Modifier.padding(18.dp)
                     )
-
-                    OtpView()
+                    var otpValue by remember { mutableStateOf("") }
+                    OtpView(
+                        onOtpChanged = {otp->
+                        otpValue = otp
+                    })
                 }
 
             }
@@ -101,22 +111,34 @@ fun OtpView(
     boxWidth: Int = 50,
     boxHeight: Int = 53,
     boxSpacing: Int = 16,
+    onOtpChanged: (String) -> Unit // Callback to handle OTP changes
 ) {
-
     val borderColor = Color(0xFFBFBFBF)
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
+        val focusRequesterList = remember {
+            MutableList(4) { FocusRequester() }
+        }
+        val focusManager = LocalFocusManager.current
         for (i in 0 until 4) {
+            var otpText by remember { mutableStateOf("") } // State to hold OTP text
+
             OutlinedTextField(
-                value = "",
+                value = otpText,
                 onValueChange = {
+                    otpText = it
+                    onOtpChanged(otpText) // Call callback to notify OTP changes
+                    if (otpText.length == 1 && i < 3) {
+                        focusRequesterList[i + 1].requestFocus()
+                    }
                 },
                 modifier = Modifier
                     .size(boxWidth.dp, boxHeight.dp)
-                    .background(color = Color.Transparent),
+                    .background(color = Color.Transparent)
+                    .focusRequester(focusRequesterList[i]), // Apply focusRequester here
                 textStyle = TextStyle.Default.copy(
                     textAlign = TextAlign.Center
                 ),
@@ -137,10 +159,13 @@ fun OtpView(
                     unfocusedTextColor = Color.White,
                     disabledTextColor = Color.White
                 ),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                visualTransformation = VisualTransformation.None,
-            )
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = if (i < 3) ImeAction.Next else ImeAction.Done,
+                )
+                )
             Spacer(modifier = Modifier.width(boxSpacing.dp))
         }
     }
 }
+
