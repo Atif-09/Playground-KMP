@@ -1,6 +1,8 @@
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import functionalities.BottomSheet
+import functionalities.FullWidthDialogue
+import functionalities.ParallaxCarousel
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -12,7 +14,9 @@ fun App() {
         //FlashlightEffect()
         //DockedSearchBarSample()
         //ExposedDropdownMenu()
-        BottomSheet()
+        //BottomSheet()
+        //ParallaxCarousel()
+        FullWidthDialogue()
 
 
     }
