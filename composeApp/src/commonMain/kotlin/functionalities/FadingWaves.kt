@@ -25,73 +25,73 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import playgroundkmp.composeapp.generated.resources.Res
 import playgroundkmp.composeapp.generated.resources.android
-import playgroundkmp.composeapp.generated.resources.bg
 
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun HeartIconWithWaveAnimations(modifier: Modifier = Modifier) {
+fun FadingWaves(modifier: Modifier = Modifier) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Center) {
 
-    val waves = listOf(
-        remember { Animatable(0f) },
-        remember { Animatable(0f) },
-        remember { Animatable(0f) },
-        remember { Animatable(0f) },
-    )
+        val waves = listOf(
+            remember { Animatable(0f) },
+            remember { Animatable(0f) },
+            remember { Animatable(0f) },
+            remember { Animatable(0f) },
+        )
 
-    val animationSpec = infiniteRepeatable<Float>(
-        animation = tween(4000, easing = FastOutLinearInEasing),
-        repeatMode = RepeatMode.Restart,
-    )
+        val animationSpec = infiniteRepeatable<Float>(
+            animation = tween(4000, easing = FastOutLinearInEasing),
+            repeatMode = RepeatMode.Restart,
+        )
 
-    waves.forEachIndexed { index, animatable ->
-        LaunchedEffect(animatable) {
-            delay(index * 500L)
-            animatable.animateTo(
-                targetValue = 1f, animationSpec = animationSpec
-            )
-        }
-    }
-
-    val dys = waves.map { it.value }
-
-    Box(
-        modifier = modifier,
-        contentAlignment = Center
-    ) {
-        // Waves
-        dys.forEach { dy ->
-            Box(
-                Modifier
-                    .size(81.dp)
-                    .align(Alignment.Center)
-                    .graphicsLayer {
-                        scaleX = dy * 4 + 1
-                        scaleY = dy * 4 + 1
-                        alpha = 1 - dy
-                    },
-            ) {
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .background(color = Color(0x0fffffff), shape = CircleShape)
+        waves.forEachIndexed { index, animatable ->
+            LaunchedEffect(animatable) {
+                delay(index * 500L)
+                animatable.animateTo(
+                    targetValue = 1f, animationSpec = animationSpec
                 )
             }
         }
 
-        // Mic icon
+        val dys = waves.map { it.value }
+
         Box(
-            Modifier
-                .size(136.dp)
-                .align(Alignment.Center)
-                .background(color = Color.White, shape = CircleShape)
+            modifier = modifier,
+            contentAlignment = Center
         ) {
-            Image(
-                painter = painterResource(Res.drawable.android),
-                "",
-                modifier = Modifier.size(136.dp)
+            // Waves
+            dys.forEach { dy ->
+                Box(
+                    Modifier
+                        .size(81.dp)
+                        .align(Alignment.Center)
+                        .graphicsLayer {
+                            scaleX = dy * 4 + 1
+                            scaleY = dy * 4 + 1
+                            alpha = 1 - dy
+                        },
+                ) {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .background(color = Color.Green, shape = CircleShape)
+                    )
+                }
+            }
+
+            Box(
+                Modifier
+                    .size(136.dp)
                     .align(Alignment.Center)
-            )
+                    .background(color = Color.White, shape = CircleShape)
+            ) {
+                Image(
+                    painter = painterResource(Res.drawable.android),
+                    "",
+                    modifier = Modifier.size(136.dp)
+                        .align(Alignment.Center)
+                )
+            }
         }
     }
 }
