@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import functionalities.CurvedScroll
 import functionalities.FadingWaves
+import functionalities.HideKeyboardAndFocus
 import functionalities.MarqueeEffectDemo
 import functionalities.OpenUrl
 import kotlinx.coroutines.delay
@@ -46,30 +47,34 @@ import kotlin.math.sin
 @Preview
 fun App() {
     MaterialTheme {
-      MarqueeEffectDemo()
-        /*     val time = remember { mutableStateOf(0f) }
-
-             LaunchedEffect(Unit) {
-                 while (true) {
-                     time.value += 0.02f
-                     delay(20)
-                 }
-             }
-
-             val modifier = Modifier.fillMaxSize().background(Color.White).clipToBounds()
-             Box(modifier = modifier, contentAlignment = Alignment.Center) {
-                 Canvas(modifier = Modifier.fillMaxSize()) {
-                     for (i in 0..< size.width.toInt()) {
-                         val damping = 0.7f * (i / size.width)
-                         val amplitude = (size.height / 4) * (1 - damping)
-                         val frequency = 20f * (1 - damping)
-                         val y = size.height / 2 + amplitude * sin(frequency * (i / size.width + time.value))
-                         drawCircle(color = Color.Red, radius = 2f, center = Offset(i.toFloat(), y))
-                     }
-                 }
-             }*/
+        HideKeyboardAndFocus()
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
